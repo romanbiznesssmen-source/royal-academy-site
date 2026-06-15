@@ -5,12 +5,15 @@ import {
   verifyMonoWebhookSignature,
   type MonoWebhookPayload,
 } from '@/lib/mono'
-import { decodePaymentMeta } from '@/lib/paymentMeta'
+import { extractCustomerFromMonoPayload } from '@/lib/extractCustomerFromMonoPayload'
 import { sendPaymentNotification } from '@/lib/telegram'
 import { MARATHON_PRICE } from '@/app/site'
 
-function getCustomerFromPayload(payload: MonoWebhookPayload) {
-  return decodePaymentMeta(payload.merchantPaymInfo?.comment)
+function resolveCustomer(
+  payload: MonoWebhookPayload,
+  invoice?: MonoWebhookPayload | null,
+) {
+  return extractCustomerFromMonoPayload(payload) ?? (invoice ? extractCustomerFromMonoPayload(invoice) : null)
 }
 
 export async function POST(req: NextRequest) {
@@ -43,28 +46,30 @@ export async function POST(req: NextRequest) {
     }
 
     if (status === 'success') {
-      let customer = getCustomerFromPayload(payload)
+      let invoice: MonoWebhookPayload | null = null
 
-      if (!customer) {
-        try {
-          const invoice = await fetchMonoInvoiceStatus(monoToken, invoiceId)
-          customer = getCustomerFromPayload(invoice)
-        } catch (error) {
-          console.error('[mono-webhook] Failed to fetch invoice status:', error)
-        }
+      try {
+        invoice = await fetchMonoInvoiceStatus(monoToken, invoiceId)
+      } catch (error) {
+        console.error('[mono-webhook] Failed to fetch invoice status:', error)
       }
 
+      const customer = resolveCustomer(payload, invoice)
       const reference =
         payload.reference ??
         payload.merchantPaymInfo?.reference ??
+        invoice?.reference ??
+        invoice?.merchantPaymInfo?.reference ??
         invoiceId
+
+      const amountSource = invoice?.amount ?? payload.amount
 
       try {
         await sendPaymentNotification({
           name: customer?.name ?? 'Не вказано',
           phone: customer?.phone || '—',
           telegram: customer?.telegram || '',
-          amount: payload.amount ? payload.amount / 100 : MARATHON_PRICE,
+          amount: amountSource ? amountSource / 100 : MARATHON_PRICE,
           invoiceId,
           reference,
         })

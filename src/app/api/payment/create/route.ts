@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 import { createMonoInvoice } from '@/lib/mono'
-import { encodePaymentMeta } from '@/lib/paymentMeta'
+import { buildPaymentDestination, encodePaymentMeta } from '@/lib/paymentMeta'
 import { splitContact } from '@/lib/parseContact'
 import { MARATHON_PRICE, SITE_NAME, SITE_URL } from '@/app/site'
 
@@ -31,15 +31,17 @@ export async function POST(req: NextRequest) {
     const reference = crypto.randomUUID()
     const amountMinor = MARATHON_PRICE * 100
     const siteUrl = SITE_URL
-    const comment = encodePaymentMeta({ name, phone, telegram })
+    const customer = { name, phone, telegram }
+    const meta = encodePaymentMeta(customer)
+    const destination = buildPaymentDestination(`Марафон англійської | ${SITE_NAME}`, customer)
 
     const invoice = await createMonoInvoice(monoToken, {
       amount: amountMinor,
       ccy: 980,
       merchantPaymInfo: {
         reference,
-        destination: `Марафон англійської | ${SITE_NAME}`,
-        comment,
+        destination,
+        comment: meta,
         basketOrder: [
           {
             name: '10-тижневий марафон англійської',
@@ -47,7 +49,7 @@ export async function POST(req: NextRequest) {
             sum: amountMinor,
             total: amountMinor,
             unit: 'доступ',
-            code: reference,
+            code: meta,
           },
         ],
       },

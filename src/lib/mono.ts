@@ -35,12 +35,19 @@ export type MonoWebhookPayload = {
   amount: number
   ccy: number
   reference?: string
+  destination?: string
   modifiedDate?: string
   failureReason?: string
   merchantPaymInfo?: {
     reference?: string
     destination?: string
     comment?: string
+    basketOrder?: Array<{
+      code?: string
+      footer?: string
+      header?: string
+      name?: string
+    }>
   }
 }
 
