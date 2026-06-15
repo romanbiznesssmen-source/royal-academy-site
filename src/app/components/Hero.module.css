@@ -1,0 +1,347 @@
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  transform: scale(1.04);
+  animation: slowZoom 20s ease-out forwards;
+}
+
+.bgImage {
+  object-fit: cover;
+  object-position: center center;
+}
+
+@media (min-width: 769px) {
+  .bg {
+    top: -14%;
+    bottom: -14%;
+    height: auto;
+    transform: scale(1.1);
+    animation: slowZoomDesktop 20s ease-out forwards;
+  }
+
+  .bgImage {
+    object-position: center center;
+  }
+}
+
+@keyframes slowZoomDesktop {
+  from { transform: scale(1.10); }
+  to   { transform: scale(1.03); }
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(var(--deep-rgb), 0.88) 0%, rgba(var(--deep-rgb), 0.62) 40%, rgba(var(--deep-rgb), 0.18) 100%),
+    linear-gradient(to right, rgba(var(--deep-rgb), 0.50) 0%, transparent 58%);
+}
+
+.body {
+  position: relative;
+  z-index: 10;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 var(--page-x) 52px;
+}
+
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 36px;
+  animation: slideUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.15s both;
+}
+
+.headline {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: clamp(36px, 4.8vw, 58px);
+  line-height: 1.12;
+  color: #fff;
+  letter-spacing: -0.03em;
+  margin: 0;
+  max-width: 720px;
+}
+
+.headline em {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-style: italic;
+  color: var(--sand);
+  letter-spacing: -0.02em;
+}
+
+.highlight {
+  font-style: italic;
+  font-weight: 800;
+  color: var(--sky);
+  letter-spacing: -0.02em;
+}
+
+.prizeBlock {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  margin: 0;
+  max-width: 560px;
+}
+
+.prizeLabel {
+  font-size: clamp(17px, 2.1vw, 22px);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.01em;
+}
+
+.prizeAmount {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--sky);
+  color: #fff;
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  box-shadow: 0 8px 28px rgba(var(--sky-rgb), 0.45);
+}
+
+.bottomRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  animation: slideUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.35s both;
+}
+
+.priceBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 420px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(10px);
+}
+
+.priceLead {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.priceRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 10px;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.pricePrefix,
+.priceInstead {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.oldPrice {
+  font-size: clamp(18px, 2.2vw, 22px);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+.newPrice {
+  font-size: clamp(30px, 4.2vw, 42px);
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.03em;
+  text-decoration: underline;
+  text-decoration-color: var(--sky);
+  text-decoration-thickness: 4px;
+  text-underline-offset: 5px;
+}
+
+.discountBadge {
+  align-self: flex-start;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--sky);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    height: 100svh;
+    max-height: 100svh;
+    min-height: unset;
+  }
+
+  .body {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    justify-content: flex-end;
+    align-items: stretch;
+    padding: 88px var(--page-x) max(44px, calc(env(safe-area-inset-bottom) + 32px));
+    gap: 0;
+    transform: none;
+  }
+
+  .textBlock {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 0;
+    padding-bottom: 20px;
+  }
+
+  .headline {
+    font-size: clamp(32px, 8.5vw, 44px);
+    line-height: 1.14;
+  }
+
+  .prizeBlock {
+    gap: 10px 12px;
+  }
+
+  .prizeLabel {
+    font-size: 16px;
+  }
+
+  .prizeAmount {
+    font-size: 22px;
+    padding: 7px 16px;
+  }
+
+  .bottomRow {
+    position: relative;
+    z-index: 1;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    flex-shrink: 0;
+    width: 100%;
+    margin-bottom: 12px;
+  }
+
+  .priceBlock {
+    max-width: none;
+    padding: 16px 18px;
+  }
+
+  .priceLead {
+    font-size: 12px;
+  }
+
+  .pricePrefix,
+  .priceInstead {
+    font-size: 15px;
+  }
+
+  .newPrice {
+    font-size: 34px;
+  }
+
+  .oldPrice {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 390px) {
+  .body {
+    padding: 84px var(--page-x) max(40px, calc(env(safe-area-inset-bottom) + 28px));
+    transform: none;
+  }
+
+  .textBlock {
+    gap: 14px;
+    padding-bottom: 16px;
+  }
+
+  .headline {
+    font-size: clamp(28px, 8vw, 36px);
+    line-height: 1.16;
+  }
+
+  .prizeAmount {
+    font-size: 20px;
+  }
+
+  .bottomRow {
+    gap: 12px;
+  }
+
+  .newPrice {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 768px) and (max-height: 700px) {
+  .body {
+    padding-top: 76px;
+    padding-bottom: max(36px, calc(env(safe-area-inset-bottom) + 24px));
+    transform: none;
+  }
+
+  .textBlock {
+    gap: 12px;
+    padding-bottom: 14px;
+  }
+
+  .headline {
+    font-size: clamp(26px, 7.5vw, 32px);
+    line-height: 1.14;
+  }
+
+  .prizeLabel {
+    font-size: 15px;
+  }
+
+  .prizeAmount {
+    font-size: 19px;
+    padding: 6px 14px;
+  }
+
+  .bottomRow {
+    gap: 10px;
+  }
+
+  .priceBlock {
+    padding: 14px 16px;
+    gap: 8px;
+  }
+
+  .newPrice {
+    font-size: 28px;
+  }
+}
