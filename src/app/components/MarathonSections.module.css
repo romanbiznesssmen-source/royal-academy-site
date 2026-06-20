@@ -422,16 +422,12 @@
   display: contents;
 }
 
-.scenarioHiddenMobile {
-  display: contents;
-}
-
 .scenarioMoreBtn {
   display: none;
 }
 
 @media (max-width: 768px) {
-  .scenarioHiddenMobile {
+  .scenarioGrid > div.scenarioHiddenMobile {
     display: none;
   }
 
